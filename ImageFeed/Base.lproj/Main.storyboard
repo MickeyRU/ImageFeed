@@ -37,7 +37,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="53v-VF-opl" userLabel="likeButton">
-                                                    <rect key="frame" x="325" y="16" width="42" height="42"/>
+                                                    <rect key="frame" x="327" y="12" width="42" height="42"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="42" id="Niq-Pp-AL1"/>
                                                         <constraint firstAttribute="width" constant="42" id="vxX-fz-rYS"/>
@@ -58,12 +58,12 @@
                                                 <constraint firstAttribute="bottom" secondItem="1xp-b1-j8s" secondAttribute="bottom" constant="4" id="1Qc-23-NIp"/>
                                                 <constraint firstItem="1xp-b1-j8s" firstAttribute="leading" secondItem="NCu-pB-2JE" secondAttribute="leading" constant="16" id="4ow-wU-K1d"/>
                                                 <constraint firstItem="6TK-rs-NkU" firstAttribute="leading" secondItem="NCu-pB-2JE" secondAttribute="leadingMargin" constant="8" id="LTm-OE-mYe"/>
-                                                <constraint firstItem="53v-VF-opl" firstAttribute="trailing" secondItem="1xp-b1-j8s" secondAttribute="trailing" constant="-10" id="Q4m-JT-xhe"/>
                                                 <constraint firstItem="1xp-b1-j8s" firstAttribute="top" secondItem="NCu-pB-2JE" secondAttribute="top" constant="4" id="QRs-tP-CH0"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6TK-rs-NkU" secondAttribute="trailing" constant="20" symbolic="YES" id="WWX-qJ-1Kk"/>
-                                                <constraint firstItem="53v-VF-opl" firstAttribute="top" secondItem="1xp-b1-j8s" secondAttribute="top" constant="12" id="YWR-vl-k2o"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="6TK-rs-NkU" secondAttribute="bottom" constant="8" id="ZCP-HE-ijx"/>
                                                 <constraint firstAttribute="trailing" secondItem="1xp-b1-j8s" secondAttribute="trailing" constant="16" id="eex-gL-MOO"/>
+                                                <constraint firstItem="53v-VF-opl" firstAttribute="top" secondItem="1xp-b1-j8s" secondAttribute="topMargin" id="tW8-AT-pdp"/>
+                                                <constraint firstItem="1xp-b1-j8s" firstAttribute="trailingMargin" secondItem="53v-VF-opl" secondAttribute="trailing" id="x2U-dA-4hx"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.10204324870000001" green="0.1053578332" blue="0.1333401203" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
