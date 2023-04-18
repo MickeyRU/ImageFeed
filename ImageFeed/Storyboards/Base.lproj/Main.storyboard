@@ -26,13 +26,21 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oPb-7l-mlN">
-                                <rect key="frame" x="9" y="55" width="78" height="24"/>
+                                <rect key="frame" x="9" y="55" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="2Og-rT-KPb"/>
+                                    <constraint firstAttribute="height" constant="24" id="pUM-GG-Wpb"/>
+                                </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button" image="nav_back_button"/>
                                 <connections>
                                     <action selector="didTapBackButton:" destination="1re-m0-eFP" eventType="touchUpInside" id="Hua-LU-JcW"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qJO-8h-d00">
+                                <rect key="frame" x="16" y="79" width="361" height="4"/>
+                                <color key="progressTintColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="EhY-Vb-uEu"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -42,10 +50,14 @@
                             <constraint firstAttribute="bottom" secondItem="byi-DK-bSK" secondAttribute="bottom" id="Kmw-Ko-iqV"/>
                             <constraint firstItem="oPb-7l-mlN" firstAttribute="leading" secondItem="EhY-Vb-uEu" secondAttribute="leading" constant="9" id="TRr-q9-DKz"/>
                             <constraint firstItem="byi-DK-bSK" firstAttribute="top" secondItem="I5J-MH-76U" secondAttribute="top" id="UpW-lj-u9c"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qJO-8h-d00" secondAttribute="trailing" id="gX3-0v-3Le"/>
+                            <constraint firstItem="qJO-8h-d00" firstAttribute="top" secondItem="oPb-7l-mlN" secondAttribute="bottom" id="mSL-ex-nkW"/>
                             <constraint firstItem="oPb-7l-mlN" firstAttribute="top" secondItem="I5J-MH-76U" secondAttribute="top" constant="55" id="s9Q-el-Mue"/>
+                            <constraint firstItem="qJO-8h-d00" firstAttribute="leading" secondItem="I5J-MH-76U" secondAttribute="leadingMargin" id="y75-GU-qUn"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="progressView" destination="qJO-8h-d00" id="3KD-ax-rd8"/>
                         <outlet property="webView" destination="byi-DK-bSK" id="Wha-Vq-JbN"/>
                     </connections>
                 </viewController>
@@ -69,8 +81,11 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZn-Th-osf">
-                                <rect key="frame" x="16" y="661" width="361" height="33"/>
+                                <rect key="frame" x="16" y="646" width="361" height="48"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="R51-5S-LSy"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Войти">
