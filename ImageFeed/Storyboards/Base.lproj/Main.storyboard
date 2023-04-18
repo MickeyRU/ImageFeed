@@ -26,19 +26,19 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oPb-7l-mlN">
-                                <rect key="frame" x="9" y="55" width="24" height="24"/>
+                                <rect key="frame" x="0.0" y="0.0" width="64" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="24" id="2Og-rT-KPb"/>
-                                    <constraint firstAttribute="height" constant="24" id="pUM-GG-Wpb"/>
+                                    <constraint firstAttribute="width" constant="64" id="2Og-rT-KPb"/>
+                                    <constraint firstAttribute="height" constant="44" id="pUM-GG-Wpb"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Button" image="nav_back_button"/>
+                                <state key="normal" image="nav_back_button"/>
                                 <connections>
                                     <action selector="didTapBackButton:" destination="1re-m0-eFP" eventType="touchUpInside" id="Hua-LU-JcW"/>
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qJO-8h-d00">
-                                <rect key="frame" x="16" y="79" width="361" height="4"/>
+                                <rect key="frame" x="16" y="44" width="361" height="4"/>
                                 <color key="progressTintColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                             </progressView>
                         </subviews>
@@ -48,11 +48,11 @@
                             <constraint firstItem="byi-DK-bSK" firstAttribute="leading" secondItem="I5J-MH-76U" secondAttribute="leading" id="2KA-8g-eWE"/>
                             <constraint firstAttribute="trailing" secondItem="byi-DK-bSK" secondAttribute="trailing" id="F8s-QL-Bjv"/>
                             <constraint firstAttribute="bottom" secondItem="byi-DK-bSK" secondAttribute="bottom" id="Kmw-Ko-iqV"/>
-                            <constraint firstItem="oPb-7l-mlN" firstAttribute="leading" secondItem="EhY-Vb-uEu" secondAttribute="leading" constant="9" id="TRr-q9-DKz"/>
+                            <constraint firstItem="qJO-8h-d00" firstAttribute="top" secondItem="EhY-Vb-uEu" secondAttribute="top" constant="44" id="RjL-Hu-rpk"/>
+                            <constraint firstItem="oPb-7l-mlN" firstAttribute="leading" secondItem="EhY-Vb-uEu" secondAttribute="leading" id="TRr-q9-DKz"/>
                             <constraint firstItem="byi-DK-bSK" firstAttribute="top" secondItem="I5J-MH-76U" secondAttribute="top" id="UpW-lj-u9c"/>
                             <constraint firstAttribute="trailingMargin" secondItem="qJO-8h-d00" secondAttribute="trailing" id="gX3-0v-3Le"/>
-                            <constraint firstItem="qJO-8h-d00" firstAttribute="top" secondItem="oPb-7l-mlN" secondAttribute="bottom" id="mSL-ex-nkW"/>
-                            <constraint firstItem="oPb-7l-mlN" firstAttribute="top" secondItem="I5J-MH-76U" secondAttribute="top" constant="55" id="s9Q-el-Mue"/>
+                            <constraint firstItem="oPb-7l-mlN" firstAttribute="top" secondItem="EhY-Vb-uEu" secondAttribute="top" id="s9Q-el-Mue"/>
                             <constraint firstItem="qJO-8h-d00" firstAttribute="leading" secondItem="I5J-MH-76U" secondAttribute="leadingMargin" id="y75-GU-qUn"/>
                         </constraints>
                     </view>
@@ -63,7 +63,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="saB-G2-tOd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1985.4961832061067" y="-2.1126760563380285"/>
+            <point key="canvasLocation" x="1773" y="-1171"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="7Z1-7c-HZ0">
@@ -81,7 +81,7 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZn-Th-osf">
-                                <rect key="frame" x="16" y="646" width="361" height="48"/>
+                                <rect key="frame" x="16" y="680" width="361" height="48"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="R51-5S-LSy"/>
@@ -108,7 +108,7 @@
                             <constraint firstItem="xZn-Th-osf" firstAttribute="leading" secondItem="FDl-1x-AGv" secondAttribute="leading" constant="16" id="1NA-de-aeU"/>
                             <constraint firstItem="aEX-60-SfD" firstAttribute="centerY" secondItem="QoZ-jl-xOC" secondAttribute="centerY" id="1RY-6A-icA"/>
                             <constraint firstItem="aEX-60-SfD" firstAttribute="centerX" secondItem="QoZ-jl-xOC" secondAttribute="centerX" id="CgJ-Zy-Th5"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="xZn-Th-osf" secondAttribute="bottom" constant="124" id="h5e-mr-7bO"/>
+                            <constraint firstItem="FDl-1x-AGv" firstAttribute="bottom" secondItem="xZn-Th-osf" secondAttribute="bottom" constant="90" id="h5e-mr-7bO"/>
                             <constraint firstItem="FDl-1x-AGv" firstAttribute="trailing" secondItem="xZn-Th-osf" secondAttribute="trailing" constant="16" id="wE6-FN-JCy"/>
                         </constraints>
                     </view>
@@ -116,7 +116,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DQX-2I-ehF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2892" y="-2"/>
+            <point key="canvasLocation" x="908" y="-1171"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="bRO-XI-X9N">
@@ -339,7 +339,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zTU-X5-mV8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3819" y="-2"/>
+            <point key="canvasLocation" x="-172" y="-1171"/>
         </scene>
     </scenes>
     <resources>
