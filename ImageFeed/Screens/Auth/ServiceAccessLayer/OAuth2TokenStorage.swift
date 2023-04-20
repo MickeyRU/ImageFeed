@@ -8,11 +8,13 @@
 import Foundation
 
 final class OAuth2TokenStorage {
-    var token: String {
+    static let shared = OAuth2TokenStorage()
+
+    var token: String? {
         get {
             guard let token = userDefaults.string(forKey: Keys.token.rawValue) else {
                 print("Нет сохраненного токена в UserDefaults")
-                return ""
+                return nil
             }
             return token
         }

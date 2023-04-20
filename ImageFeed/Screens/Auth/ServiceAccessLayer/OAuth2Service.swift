@@ -10,30 +10,34 @@ import Foundation
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
-    
+
     private let urlSession = URLSession.shared
-    
+
     private (set) var authToken: String? {
         get {
              return OAuth2TokenStorage().token
         }
         set {
-            OAuth2TokenStorage().token = newValue ?? ""
+            OAuth2TokenStorage().token = newValue
         }
     }
-    
+
     func fetchAuthToken (_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let request = authTokenRequest(code: code)
+        print(request)
         let task = object(for: request) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let body):
                 let authToken = body.accessToken
                 self.authToken = authToken
+                print(authToken)
                 completion(.success(authToken))
             case .failure(let error):
                 completion(.failure(error))
-            } }
+            }
+            
+        }
         task.resume()
     }
 }
@@ -51,7 +55,7 @@ extension OAuth2Service {
             baseURL: URL(string: "https://unsplash.com")!
         )
     }
-    
+
     private func object(for request: URLRequest, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) -> URLSessionTask {
         let decoder = JSONDecoder()
         return urlSession.data(for: request) { (result: Result<Data, Error>) in
