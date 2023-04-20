@@ -13,7 +13,7 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
-    private let showLoginFlowSegueIdentifier = "showLoginFlow"
+    private let showLoginFlowSegueIdentifier = "ShowLoginFlow"
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -45,12 +45,10 @@ extension SplashViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Проверим, что переходим на авторизацию
         if segue.identifier == showLoginFlowSegueIdentifier {
-            // Доберёмся до первого контроллера в навигации.
             guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController else { fatalError("Failed to prepare for \(showLoginFlowSegueIdentifier)") }
+                let viewController = segue.destination as? AuthViewController else { fatalError("Failed to prepare for \(showLoginFlowSegueIdentifier)") }
             // Установим делегатом контроллера наш SplashViewController
-            navigationController.modalPresentationCapturesStatusBarAppearance = true
+            viewController.modalPresentationCapturesStatusBarAppearance = true
             viewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
