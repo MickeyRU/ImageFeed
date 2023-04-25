@@ -9,6 +9,10 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+    
     // MARK: - IBOutlet
     
     @IBOutlet private var tableView: UITableView!
@@ -38,6 +42,7 @@ final class ImagesListViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ShowSingleImageSegueIdentifier {
             let viewController = segue.destination as! SingleImageViewController
+            viewController.modalPresentationCapturesStatusBarAppearance = true
             let indexPath = sender as! IndexPath
             let image = UIImage(named: photosName[indexPath.row])
             viewController.image = image
