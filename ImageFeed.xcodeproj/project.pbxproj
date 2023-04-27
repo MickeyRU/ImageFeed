@@ -21,6 +21,7 @@
 		BEA553E029DB0629001A1BA5 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA553DF29DB0629001A1BA5 /* UIView+Extension.swift */; };
 		BEA553E429DB1865001A1BA5 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA553E329DB1865001A1BA5 /* Color.swift */; };
 		BEA553E629DB18CA001A1BA5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA553E529DB18CA001A1BA5 /* UIColor+Extension.swift */; };
+		BED33E4A29FA9190002077AA /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = BED33E4929FA9190002077AA /* ProgressHUD */; };
 		BEDAED2429C367D0005BBF34 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDAED2329C367D0005BBF34 /* AppDelegate.swift */; };
 		BEDAED2629C367D0005BBF34 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDAED2529C367D0005BBF34 /* SceneDelegate.swift */; };
 		BEDAED2829C367D0005BBF34 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDAED2729C367D0005BBF34 /* ImagesListViewController.swift */; };
@@ -59,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BED33E4A29FA9190002077AA /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +224,9 @@
 			dependencies = (
 			);
 			name = ImageFeed;
+			packageProductDependencies = (
+				BED33E4929FA9190002077AA /* ProgressHUD */,
+			);
 			productName = ImageFeed;
 			productReference = BEDAED2029C367D0005BBF34 /* ImageFeed.app */;
 			productType = "com.apple.product-type.application";
@@ -250,6 +255,9 @@
 				Base,
 			);
 			mainGroup = BEDAED1729C367D0005BBF34;
+			packageReferences = (
+				BED33E4829FA9190002077AA /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+			);
 			productRefGroup = BEDAED2129C367D0005BBF34 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -521,6 +529,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BED33E4829FA9190002077AA /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
+			requirement = {
+				kind = exactVersion;
+				version = 13.6.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BED33E4929FA9190002077AA /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BED33E4829FA9190002077AA /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BEDAED1829C367D0005BBF34 /* Project object */;
 }
