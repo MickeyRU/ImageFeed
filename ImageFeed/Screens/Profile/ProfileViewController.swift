@@ -8,7 +8,6 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
@@ -22,7 +21,7 @@ final class ProfileViewController: UIViewController {
         return imageView
     }()
     
-    private let userNameLabel: UILabel = {
+    private var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.font = .boldSystemFont(ofSize: 23)
@@ -30,7 +29,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let accountNameLabel: UILabel = {
+    private var loginNameLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.font = .systemFont(ofSize: 13)
@@ -38,7 +37,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let statusLabel: UILabel = {
+    private var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.font = .systemFont(ofSize: 13)
@@ -64,12 +63,14 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         layout()
+        guard let token = OAuth2TokenStorage.shared.token else { return }
+        fetchProfile(token: token)
     }
         
     // MARK: - Private Methods
     
     private func layout() {
-        [profileImage, userNameLabel, accountNameLabel, statusLabel, exitButton].forEach { view.addViews($0) }
+        [profileImage, nameLabel, loginNameLabel, descriptionLabel, exitButton].forEach { view.addViews($0) }
         
         NSLayoutConstraint.activate([
             profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -77,22 +78,43 @@ final class ProfileViewController: UIViewController {
             profileImage.widthAnchor.constraint(equalToConstant: 70),
             profileImage.heightAnchor.constraint(equalTo: profileImage.widthAnchor, multiplier: 1.0),
             
-            userNameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
-            userNameLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor),
-            userNameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            nameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor),
+            nameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
             
-            accountNameLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 8),
-            accountNameLabel.leadingAnchor.constraint(equalTo: userNameLabel.leadingAnchor),
-            accountNameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            loginNameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
             
-            statusLabel.topAnchor.constraint(equalTo: accountNameLabel.bottomAnchor, constant: 8),
-            statusLabel.leadingAnchor.constraint(equalTo: accountNameLabel.leadingAnchor),
-            statusLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: loginNameLabel.leadingAnchor),
+            descriptionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
             
             exitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -26),
             exitButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             exitButton.widthAnchor.constraint(equalToConstant: 20),
             exitButton.heightAnchor.constraint(equalToConstant: 22)
         ])
+    }
+}
+
+extension ProfileViewController {
+    
+    // Метод для обновления интерфейса при фетче профайла с сервера
+    private func fetchProfile(token: String) {
+        ProfileService.shared.fetchProfile(token) { [weak self] profileResult in
+            guard let self = self else { return }
+            switch profileResult {
+            case .success(let result):
+                let profile = ProfileService.shared.convertProfile(profile: result)
+                DispatchQueue.main.async { // Обновление интерфейса проводим в главном потоке ассинхроно
+                    self.nameLabel.text = profile.name
+                    self.loginNameLabel.text = profile.loginName
+                    self.descriptionLabel.text = profile.bio
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }

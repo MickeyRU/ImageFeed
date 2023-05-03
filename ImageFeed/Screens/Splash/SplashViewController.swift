@@ -22,7 +22,6 @@ final class SplashViewController: UIViewController {
         checkAuthStatus()
     }
     
-    
     private func checkAuthStatus() {
         if OAuth2TokenStorage().token != nil {
             switchToTabBarController()
@@ -61,7 +60,7 @@ extension SplashViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        ProgressHUD.show()
+        UIBlockingProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.fetchOAuthToken(code)
@@ -70,13 +69,12 @@ extension SplashViewController: AuthViewControllerDelegate {
     
     private func fetchOAuthToken(_ code: String) {
         OAuth2Service.shared.fetchAuthToken(code) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch result {
             case .success:
                 self.switchToTabBarController()
-                ProgressHUD.dismiss()
             case .failure:
-                ProgressHUD.dismiss()
                 // TODO [Sprint 11]
                 break
             }
