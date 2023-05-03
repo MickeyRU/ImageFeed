@@ -42,6 +42,8 @@ final class ProfileService {
     private var task: URLSessionTask?
     private let urlSession = URLSession.shared
     
+    private(set) var profile: Profile?
+    
     func fetchProfile(_ token: String, completion: @escaping (Result<ProfileResult, Error>) -> Void) {
         assert(Thread.isMainThread)
         if task != nil {
@@ -52,6 +54,8 @@ final class ProfileService {
                 guard let self = self else { return }
                 switch result {
                 case .success(let profileData):
+                    let convertedProfile = self.convertProfile(profile: profileData)
+                    self.profile = convertedProfile
                     completion(.success(profileData))
                 case .failure(let error):
                     self.task?.cancel()

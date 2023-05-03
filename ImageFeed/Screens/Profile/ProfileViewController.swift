@@ -61,10 +61,13 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         layout()
-        guard let token = OAuth2TokenStorage.shared.token else { return }
-        fetchProfile(token: token)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let profile = ProfileService.shared.profile else { return }
+        updateProfileUIData(profile: profile)
     }
         
     // MARK: - Private Methods
@@ -99,22 +102,11 @@ final class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController {
-    
-    // Метод для обновления интерфейса при фетче профайла с сервера
-    private func fetchProfile(token: String) {
-        ProfileService.shared.fetchProfile(token) { [weak self] profileResult in
-            guard let self = self else { return }
-            switch profileResult {
-            case .success(let result):
-                let profile = ProfileService.shared.convertProfile(profile: result)
-                DispatchQueue.main.async { // Обновление интерфейса проводим в главном потоке ассинхроно
-                    self.nameLabel.text = profile.name
-                    self.loginNameLabel.text = profile.loginName
-                    self.descriptionLabel.text = profile.bio
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+    func updateProfileUIData(profile: Profile) {
+        DispatchQueue.main.async { // Обновляем UI в главном асинхронном потоке
+            self.nameLabel.text = profile.name
+            self.descriptionLabel.text = profile.bio
+            self.loginNameLabel.text = profile.loginName
         }
     }
 }
