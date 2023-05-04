@@ -7,35 +7,6 @@
 
 import UIKit
 
-struct ProfileResult: Codable {
-    let userLogin: String
-    let firstName: String?
-    let lastName: String?
-    let bio: String?
-    let profileImage: ProfileImage?
-    
-    private enum CodingKeys: String, CodingKey {
-        case userLogin = "username"
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case bio
-        case profileImage = "profile_image"
-    }
-}
-
-struct ProfileImage: Codable {
-    let small: String?
-    let medium: String?
-    let large: String?
-}
-
-struct Profile {
-    let username: String
-    let name: String
-    let loginName : String
-    let bio: String?
-}
-
 final class ProfileService {
     static let shared = ProfileService()
     
@@ -90,7 +61,7 @@ final class ProfileService {
         let decoder = JSONDecoder()
         return urlSession.data(for: request) { (result: Result<Data, Error>) in
             let response = result.flatMap { data -> Result<ProfileResult, Error> in Result {
-                    try decoder.decode(ProfileResult.self, from: data)
+                try decoder.decode(ProfileResult.self, from: data)
                 }
             }
             completion(response)

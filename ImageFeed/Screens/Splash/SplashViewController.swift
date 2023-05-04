@@ -90,6 +90,8 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch profileResult {
             case .success(let result):
                 let profile = ProfileService.shared.convertProfile(profile: result)
+                let username = profile.username
+                ProfileImageService.shared.fetchProfileImageURL(username: username, token: token) { _ in }
                 self.switchToTabBarController()
             case .failure:
                 // TODO [Sprint 11] Показать ошибку
