@@ -52,6 +52,8 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     @objc private func didTappedExitButton() {
         // ToDo: code
         print("didTappedExitButton")
@@ -62,6 +64,16 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ){ [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,6 +110,14 @@ final class ProfileViewController: UIViewController {
             exitButton.widthAnchor.constraint(equalToConstant: 20),
             exitButton.heightAnchor.constraint(equalToConstant: 22)
         ])
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURl = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURl)
+        else { return }
+        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
     }
 }
 
