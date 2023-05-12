@@ -10,30 +10,31 @@ import UIKit
 final class ProfileService {
     static let shared = ProfileService()
     
-    private var task: URLSessionTask?
-    private let urlSession = URLSession.shared
-    
+    private var currentTask: URLSessionTask?
+    private let networkClient = NetworkClient.shared
+
     private(set) var profile: Profile?
     
     func fetchProfile(_ token: String, completion: @escaping (Result<ProfileResult, Error>) -> Void) {
         assert(Thread.isMainThread)
-        if task != nil {
-            task?.cancel()
+        if currentTask != nil {
+            currentTask?.cancel()
         } else {
-            let request = makeUserProfileRequest(token: token)
-            let task = object(for: request) { [weak self] result in
+            guard let urlRequestSelfProfile = selfProfileRequest() else { return }
+            let task = networkClient.getObject(dataType: ProfileResult.self, for: urlRequestSelfProfile) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
-                case .success(let profileData):
-                    let convertedProfile = self.convertProfile(profile: profileData)
+                case .success(let profileResult):
+                    let convertedProfile = self.convertProfile(profile: profileResult)
                     self.profile = convertedProfile
-                    completion(.success(profileData))
+                    completion(.success(profileResult))
                 case .failure(let error):
-                    self.task?.cancel()
+                    self.currentTask = nil
                     completion(.failure(error))
                 }
+                self.currentTask = nil
             }
-            self.task = task
+            self.currentTask = task
             task.resume()
         }
     }
@@ -48,24 +49,7 @@ final class ProfileService {
         return profile
     }
     
-    private func makeUserProfileRequest(token: String) -> URLRequest {
-        var url = Constants.defaultBaseURL
-        url.appendPathComponent("me")
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        return request
-    }
-    
-    // Создаем URLSessionTask и декодируем ответ в структуру ProfileResult
-    private func object(for request: URLRequest, completion: @escaping (Result<ProfileResult, Error>) -> Void) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
-            let response = result.flatMap { data -> Result<ProfileResult, Error> in Result {
-                try decoder.decode(ProfileResult.self, from: data)
-                }
-            }
-            completion(response)
-            self.task = nil
-        }
+    private func selfProfileRequest() -> URLRequest? {
+        URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", uRLString: Constants.defaultApiBaseURLString)
     }
 }

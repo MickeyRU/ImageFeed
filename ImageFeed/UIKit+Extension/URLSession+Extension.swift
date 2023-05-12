@@ -1,8 +1,8 @@
 //
-//  NetworkConnection.swift
+//  URLSession+Extension.swift
 //  ImageFeed
 //
-//  Created by Павел Афанасьев on 02.05.2023.
+//  Created by Павел Афанасьев on 11.05.2023.
 //
 
 import Foundation
@@ -20,7 +20,8 @@ extension URLSession {
                 completion(result)
             }
         }
-        let task = dataTask(with: request, completionHandler: { data, response, error in
+        
+        let task = dataTask(with: request) { data, response, error in
             if let data = data,
                let response = response,
                let statusCode = (response as? HTTPURLResponse)?.statusCode
@@ -35,8 +36,7 @@ extension URLSession {
             } else {
                 fulfillCompletion(.failure(NetworkError.urlSessionError))
             }
-        })
-        task.resume()
+        }
         return task
     }
 }

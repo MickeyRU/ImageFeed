@@ -14,6 +14,11 @@ final class SplashViewController: UIViewController {
         .lightContent
     }
     
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    private let authService = OAuth2Service.shared
+    private let alertPresenter = AlertPresenter.shared
+    
     private let showLoginFlowSegueIdentifier = "ShowLoginFlow"
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,34 +73,44 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     
     private func fetchOAuthToken(_ code: String) {
-        OAuth2Service.shared.fetchAuthToken(code) { [weak self] result in
+        authService.fetchAuthToken(code) { [weak self] result in
             UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch result {
-            case .success:
-                guard let token = OAuth2Service.shared.authToken else { return }
+            case .success(let token):
                 self.fetchProfile(token: token)
-            case .failure:
-                // TODO [Sprint 11]
-                break
+            case .failure(let error):
+                self.alertPresenter.createAlert(title: "Что-то пошло не так :(",
+                                                message: "Не удалось войти в систему. \(error.localizedDescription)") {
+                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
+                }
             }
         }
     }
     
-    // Метод для обновления интерфейса при фетче профайла с сервера
     private func fetchProfile(token: String) {
-        ProfileService.shared.fetchProfile(token) { [weak self] profileResult in
+        profileService.fetchProfile(token) { [weak self] profileResult in
             UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch profileResult {
             case .success(let result):
                 let profile = ProfileService.shared.convertProfile(profile: result)
                 let username = profile.username
-                ProfileImageService.shared.fetchProfileImageURL(username: username, token: token) { _ in }
+                profileImageService.fetchProfileImageURL(userName: username) { _ in }
                 self.switchToTabBarController()
-            case .failure:
-                // TODO [Sprint 11] Показать ошибку
-                break            }
+            case .failure(let error):
+                alertPresenter.createAlert(title: "Что-то пошло не так :(",
+                                           message: "Не удалось войти в систему, \(error.localizedDescription)") {
+                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
+                }
+            }
         }
+    }
+}
+
+// MARK: - AlertPresenterProtocol
+extension SplashViewController: AlertPresenterProtocol {
+    func showAlert(alert: UIAlertController) {
+        self.present(alert, animated: true)
     }
 }

@@ -11,18 +11,18 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
-    private var task: URLSessionTask?
-    private let urlSession = URLSession.shared
+    private var currentTask: URLSessionTask?
+    private let networkClient = NetworkClient.shared
     
     private (set) var avatarURL: String?
     
-    func fetchProfileImageURL(username: String, token: String, completion: @escaping (Result<String, Error>) -> Void) {
+    func fetchProfileImageURL(userName: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
-        if task != nil {
-            task?.cancel()
+        if currentTask != nil {
+            currentTask?.cancel()
         } else {
-            let request = makeUserPhotoProfileRequest(username: username, token: token)
-            let task = object(for: request) { [weak self] result in
+            guard let urlRequestProfileData = makeUserPhotoProfileRequest(userName: userName) else { return }
+            let task = networkClient.getObject(dataType: ProfileImage.self, for: urlRequestProfileData) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let profilePhoto):
@@ -35,33 +35,16 @@ final class ProfileImageService {
                     )
                     completion(.success(smallPhoto))
                 case .failure(let error):
-                    self.task?.cancel()
                     completion(.failure(error))
                 }
+                self.currentTask = nil
             }
-            self.task = task
+            self.currentTask = task
             task.resume()
         }
     }
     
-    private func makeUserPhotoProfileRequest(username: String, token: String) -> URLRequest {
-        var url = Constants.defaultBaseURL
-        url.appendPathComponent("/users/\(username)")
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        return request
-    }
-    
-    // Создаем URLSessionTask и декодируем ответ в структуру ProfileResult
-    private func object(for request: URLRequest, completion: @escaping (Result<ProfileImage, Error>) -> Void) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
-            let response = result.flatMap { data -> Result<ProfileImage, Error> in Result {
-                try decoder.decode(ProfileImage.self, from: data)
-                }
-            }
-            completion(response)
-            self.task = nil
-        }
+    private func makeUserPhotoProfileRequest(userName: String) -> URLRequest? {
+        URLRequest.makeHTTPRequest(path: "/users/\(userName)", httpMethod: "GET", uRLString: Constants.baseURLString)
     }
 }
