@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -14,8 +15,10 @@ final class ProfileViewController: UIViewController {
         
     // MARK: - Private Properties
     
+    private let profileImageService = ProfileImageService.shared
+    
     private let profileImage : UIImageView = {
-        let imageView = UIImageView(image: Images.defaultProfileImage)
+        let imageView = UIImageView()
         imageView.layer.cornerRadius = 61
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -117,7 +120,9 @@ final class ProfileViewController: UIViewController {
             let profileImageURl = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURl)
         else { return }
-        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+        profileImage.kf.indicatorType = .activity
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileImage.kf.setImage(with: url, options: [.processor(processor)])
     }
 }
 

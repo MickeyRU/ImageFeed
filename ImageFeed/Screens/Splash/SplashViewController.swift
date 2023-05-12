@@ -21,6 +21,11 @@ final class SplashViewController: UIViewController {
     
     private let showLoginFlowSegueIdentifier = "ShowLoginFlow"
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        alertPresenter.delegate = self
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -94,7 +99,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch profileResult {
             case .success(let result):
-                let profile = ProfileService.shared.convertProfile(profile: result)
+                let profile = profileService.convertProfile(profile: result)
                 let username = profile.username
                 profileImageService.fetchProfileImageURL(userName: username) { _ in }
                 self.switchToTabBarController()

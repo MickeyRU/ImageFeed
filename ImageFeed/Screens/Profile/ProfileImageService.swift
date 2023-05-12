@@ -22,18 +22,18 @@ final class ProfileImageService {
             currentTask?.cancel()
         } else {
             guard let urlRequestProfileData = makeUserPhotoProfileRequest(userName: userName) else { return }
-            let task = networkClient.getObject(dataType: ProfileImage.self, for: urlRequestProfileData) { [weak self] result in
+            let task = networkClient.getObject(dataType: ProfileResult.self, for: urlRequestProfileData) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
                 case .success(let profilePhoto):
-                    guard let smallPhoto = profilePhoto.small else { return }
-                    self.avatarURL = smallPhoto
+                    guard let mediumPhoto = profilePhoto.profileImage?.medium else { return }
+                    self.avatarURL = mediumPhoto
                     NotificationCenter.default.post(
                         name: ProfileImageService.didChangeNotification,
                         object: self,
-                        userInfo: ["URL": smallPhoto]
+                        userInfo: ["URL": mediumPhoto]
                     )
-                    completion(.success(smallPhoto))
+                    completion(.success(mediumPhoto))
                 case .failure(let error):
                     completion(.failure(error))
                 }
@@ -45,6 +45,6 @@ final class ProfileImageService {
     }
     
     private func makeUserPhotoProfileRequest(userName: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(path: "/users/\(userName)", httpMethod: "GET", uRLString: Constants.baseURLString)
+        URLRequest.makeHTTPRequest(path: "/users/\(userName)", httpMethod: "GET", uRLString: Constants.defaultApiBaseURLString)
     }
 }
