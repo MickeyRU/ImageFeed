@@ -9,4 +9,5 @@ import UIKit
 
 enum Colors {
     static let accountNameLabel = UIColor.init(rgb: 0xAEAFB4)
+    static let logoViewBGColor = UIColor.init(rgb: 0x1A1B22)
 }
