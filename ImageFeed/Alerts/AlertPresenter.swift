@@ -11,9 +11,7 @@ protocol AlertPresenterProtocol: AnyObject {
     func showAlert(alert: UIAlertController)
 }
 
-final class AlertPresenter {
-    static let shared = AlertPresenter()
-    
+final class AlertPresenter {    
     weak var delegate: AlertPresenterProtocol?
     
     func createAlert(title: String, message: String, handler: @escaping () -> Void) {

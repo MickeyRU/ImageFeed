@@ -66,7 +66,7 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        layout()
+        setupViews()
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,
@@ -87,7 +87,7 @@ final class ProfileViewController: UIViewController {
         
     // MARK: - Private Methods
     
-    private func layout() {
+    private func setupViews() {
         [profileImage, nameLabel, loginNameLabel, descriptionLabel, exitButton].forEach { view.addViews($0) }
         
         NSLayoutConstraint.activate([
