@@ -6,23 +6,25 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
         
     // MARK: - Private Properties
     
+    private let profileImageService = ProfileImageService.shared
+    
     private let profileImage : UIImageView = {
-        let imageView = UIImageView(image: Images.defaultProfileImage)
+        let imageView = UIImageView()
         imageView.layer.cornerRadius = 61
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
-    private let userNameLabel: UILabel = {
+    private var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.font = .boldSystemFont(ofSize: 23)
@@ -30,7 +32,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let accountNameLabel: UILabel = {
+    private var loginNameLabel: UILabel = {
         let label = UILabel()
         label.text = "@ekaterina_nov"
         label.font = .systemFont(ofSize: 13)
@@ -38,7 +40,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private let statusLabel: UILabel = {
+    private var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.font = .systemFont(ofSize: 13)
@@ -53,6 +55,8 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     @objc private func didTappedExitButton() {
         // ToDo: code
         print("didTappedExitButton")
@@ -62,14 +66,29 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         layout()
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ){ [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let profile = ProfileService.shared.profile else { return }
+        updateProfileUIData(profile: profile)
     }
         
     // MARK: - Private Methods
     
     private func layout() {
-        [profileImage, userNameLabel, accountNameLabel, statusLabel, exitButton].forEach { view.addViews($0) }
+        [profileImage, nameLabel, loginNameLabel, descriptionLabel, exitButton].forEach { view.addViews($0) }
         
         NSLayoutConstraint.activate([
             profileImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -77,22 +96,42 @@ final class ProfileViewController: UIViewController {
             profileImage.widthAnchor.constraint(equalToConstant: 70),
             profileImage.heightAnchor.constraint(equalTo: profileImage.widthAnchor, multiplier: 1.0),
             
-            userNameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
-            userNameLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor),
-            userNameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            nameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: profileImage.leadingAnchor),
+            nameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
             
-            accountNameLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 8),
-            accountNameLabel.leadingAnchor.constraint(equalTo: userNameLabel.leadingAnchor),
-            accountNameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
+            loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            loginNameLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
             
-            statusLabel.topAnchor.constraint(equalTo: accountNameLabel.bottomAnchor, constant: 8),
-            statusLabel.leadingAnchor.constraint(equalTo: accountNameLabel.leadingAnchor),
-            statusLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: loginNameLabel.leadingAnchor),
+            descriptionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
             
             exitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -26),
             exitButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             exitButton.widthAnchor.constraint(equalToConstant: 20),
             exitButton.heightAnchor.constraint(equalToConstant: 22)
         ])
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURl = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURl)
+        else { return }
+        profileImage.kf.indicatorType = .activity
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        profileImage.kf.setImage(with: url, options: [.processor(processor)])
+    }
+}
+
+extension ProfileViewController {
+    func updateProfileUIData(profile: Profile) {
+        DispatchQueue.main.async { // Обновляем UI в главном асинхронном потоке
+            self.nameLabel.text = profile.name
+            self.descriptionLabel.text = profile.bio
+            self.loginNameLabel.text = profile.loginName
+        }
     }
 }
