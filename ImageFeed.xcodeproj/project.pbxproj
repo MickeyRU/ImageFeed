@@ -24,7 +24,6 @@
 		BEA19C412A0E87C000829F9A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = BEA19C402A0E87C000829F9A /* Kingfisher */; };
 		BEA19C442A0EA04300829F9A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = BEA19C432A0EA04300829F9A /* SwiftKeychainWrapper */; };
 		BEA19C462A0EB38C00829F9A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA19C452A0EB38C00829F9A /* TabBarController.swift */; };
-		BEA19C482A10E86900829F9A /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA19C472A10E86900829F9A /* ImagesListService.swift */; };
 		BEA19C4A2A10EA0600829F9A /* ImagesStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA19C492A10EA0600829F9A /* ImagesStructures.swift */; };
 		BEA553DE29DB0600001A1BA5 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA553DD29DB0600001A1BA5 /* Images.swift */; };
 		BEA553E029DB0629001A1BA5 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA553DF29DB0629001A1BA5 /* UIView+Extension.swift */; };
@@ -41,6 +40,7 @@
 		BEDAED2D29C367D2005BBF34 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEDAED2C29C367D2005BBF34 /* Assets.xcassets */; };
 		BEDAED3029C367D2005BBF34 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BEDAED2E29C367D2005BBF34 /* LaunchScreen.storyboard */; };
 		BEE2C1822A0D8090001BB3E9 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE2C1812A0D8090001BB3E9 /* URLSession+Extension.swift */; };
+		BEF3467B2A125AD500A84919 /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEF3467A2A125AD500A84919 /* ImagesListService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,7 +59,6 @@
 		BEA19C392A0D903A00829F9A /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		BEA19C3D2A0E77F400829F9A /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		BEA19C452A0EB38C00829F9A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		BEA19C472A10E86900829F9A /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImagesListService.swift; path = ../../../../../../../ImagesListService.swift; sourceTree = "<group>"; };
 		BEA19C492A10EA0600829F9A /* ImagesStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesStructures.swift; sourceTree = "<group>"; };
 		BEA553DD29DB0600001A1BA5 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		BEA553DF29DB0629001A1BA5 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
@@ -77,6 +76,7 @@
 		BEDAED2F29C367D2005BBF34 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BEDAED3129C367D2005BBF34 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BEE2C1812A0D8090001BB3E9 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
+		BEF3467A2A125AD500A84919 /* ImagesListService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,7 +203,7 @@
 		BEBC6E0A29D709D6000228F3 /* ImageList */ = {
 			isa = PBXGroup;
 			children = (
-				BEA19C472A10E86900829F9A /* ImagesListService.swift */,
+				BEF3467A2A125AD500A84919 /* ImagesListService.swift */,
 				BEA19C492A10EA0600829F9A /* ImagesStructures.swift */,
 				BE46CEA229C4A6CE00960344 /* ImagesListCell.swift */,
 				BEDAED2729C367D0005BBF34 /* ImagesListViewController.swift */,
@@ -365,9 +365,9 @@
 				BEDAED2629C367D0005BBF34 /* SceneDelegate.swift in Sources */,
 				BEA553E429DB1865001A1BA5 /* Color.swift in Sources */,
 				BEE2C1822A0D8090001BB3E9 /* URLSession+Extension.swift in Sources */,
-				BEA19C482A10E86900829F9A /* ImagesListService.swift in Sources */,
 				BE3826692A02E0C800F27437 /* ProfileStructures.swift in Sources */,
 				BEA553E629DB18CA001A1BA5 /* UIColor+Extension.swift in Sources */,
+				BEF3467B2A125AD500A84919 /* ImagesListService.swift in Sources */,
 				BEB1C3922A0142F0007FA345 /* UIBlockingProgressHUD.swift in Sources */,
 				BEA19C3A2A0D903A00829F9A /* NetworkClient.swift in Sources */,
 			);
