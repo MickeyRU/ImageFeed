@@ -145,7 +145,7 @@ extension SplashViewController: AuthViewControllerDelegate {
 }
 
 // MARK: - AlertPresenterProtocol
-extension SplashViewController: AlertPresenterProtocol {
+extension SplashViewController: AlertPresenterDelegate {
     func showAlert(alert: UIAlertController) {
         self.present(alert, animated: true)
     }

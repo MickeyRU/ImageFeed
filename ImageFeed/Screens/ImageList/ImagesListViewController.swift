@@ -14,20 +14,17 @@ final class ImagesListViewController: UIViewController {
     }
     
     // MARK: - IBOutlet
-    
+
     @IBOutlet private var tableView: UITableView!
     
     // MARK: - Private Properties
     
-    private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
-    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
+    private let showSingleImageSegueIdentifier = "ShowSingleImage"
     
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
+    private let imageListService = ImagesListService.shared
+    private var photos: [Photo] = []
+    private var imageListServiceObserver: NSObjectProtocol?
+    
     
     // MARK: - VC LC
     
@@ -35,33 +32,54 @@ final class ImagesListViewController: UIViewController {
         super.viewDidLoad()
         
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        
+        if photos.count == 0 {
+            imageListService.fetchPhotosNextPage()
+        }
+        imageListServiceObserver = NotificationCenter.default.addObserver(
+            forName: ImagesListService.didChangeNotification,
+            object: nil,
+            queue: .main,
+            using: { [weak self] _ in
+                guard let self = self else { return }
+                self.updateTableViewAnimated()
+            })
     }
     
     // MARK: - Public methods
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowSingleImageSegueIdentifier {
-            let viewController = segue.destination as! SingleImageViewController
-            viewController.modalPresentationCapturesStatusBarAppearance = true
-            let indexPath = sender as! IndexPath
-            let image = UIImage(named: photosName[indexPath.row])
-            viewController.image = image
+        if segue.identifier == showSingleImageSegueIdentifier {
+            guard
+                let singleViewController = segue.destination as? SingleImageViewController,
+                let indexPath = sender as? IndexPath
+            else { return }
+            let singlePhoto = photos[indexPath.row]
+            singleViewController.modalPresentationCapturesStatusBarAppearance = true
+            singleViewController.photo = singlePhoto
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
     
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let imagePhoto = UIImage(named: photosName[indexPath.row]) else {
-            return
+    // MARK: - Private methods
+    
+    private func updateTableViewAnimated() {
+        let oldCount = photos.count
+        let newCount = imageListService.photos.count
+        photos = imageListService.photos
+        if oldCount != newCount {
+            tableView.performBatchUpdates {
+                let indexPaths = (oldCount..<newCount).map { i in
+                    IndexPath(row: i, section: 0)
+                }
+                tableView.insertRows(at: indexPaths, with: .automatic)
+            } completion: { _ in }
         }
-        cell.photoImageView.image = imagePhoto
-        
-        cell.dateLabel.text = dateFormatter.string(from: Date())
-        
-        let isLiked = indexPath.row % 2 == 0
-        let likeImage = isLiked ? UIImage(named: "likeIsActive") : UIImage(named: "likeIsNotActive")
-        cell.likeButton.setImage(likeImage, for: .normal)
+    }
+    
+    private func reloadRowForTable(indexPath: IndexPath) {
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
 
@@ -69,19 +87,24 @@ final class ImagesListViewController: UIViewController {
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
+        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return 0
-        }
+        let photo = photos[indexPath.row]
+        
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
-        let imageWidth = image.size.width
+        let imageWidth = photo.size.width
         let scale = imageViewWidth / imageWidth
-        let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
+        let cellHeight = photo.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == photos.count {
+            imageListService.fetchPhotosNextPage()
+        }
     }
 }
 
@@ -89,7 +112,7 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count
+        photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -99,7 +122,15 @@ extension ImagesListViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        configCell(for: imageListCell, with: indexPath)
+        let photo = photos[indexPath.row]
+        
+        imageListCell.reloadRowClosure = { [weak self] in
+            guard let self = self else { return }
+            self.reloadRowForTable(indexPath: indexPath)
+            
+        }
+        imageListCell.configureCell(photo: photo)
+        
         return imageListCell
     }
 }

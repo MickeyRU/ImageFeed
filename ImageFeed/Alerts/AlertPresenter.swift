@@ -7,12 +7,12 @@
 
 import UIKit
 
-protocol AlertPresenterProtocol: AnyObject {
+protocol AlertPresenterDelegate: AnyObject {
     func showAlert(alert: UIAlertController)
 }
 
 final class AlertPresenter {    
-    weak var delegate: AlertPresenterProtocol?
+    weak var delegate: AlertPresenterDelegate?
     
     func createAlert(title: String, message: String, handler: @escaping () -> Void) {
         let alert = UIAlertController(title: title,
