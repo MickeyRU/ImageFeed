@@ -14,7 +14,7 @@ final class ImagesListViewController: UIViewController {
     }
     
     // MARK: - IBOutlet
-
+    
     @IBOutlet private var tableView: UITableView!
     
     // MARK: - Private Properties
@@ -24,6 +24,7 @@ final class ImagesListViewController: UIViewController {
     private let imageListService = ImagesListService.shared
     private var photos: [Photo] = []
     private var imageListServiceObserver: NSObjectProtocol?
+    private let alertPresenter = AlertPresenter()
     
     
     // MARK: - VC LC
@@ -44,6 +45,8 @@ final class ImagesListViewController: UIViewController {
                 guard let self = self else { return }
                 self.updateTableViewAnimated()
             })
+        
+        alertPresenter.delegate = self
     }
     
     // MARK: - Public methods
@@ -123,14 +126,46 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         
         let photo = photos[indexPath.row]
-        
+        imageListCell.delegate = self
         imageListCell.reloadRowClosure = { [weak self] in
             guard let self = self else { return }
             self.reloadRowForTable(indexPath: indexPath)
-            
         }
         imageListCell.configureCell(photo: photo)
         
         return imageListCell
+    }
+}
+
+// MARK: - ImagesListCellDelegate
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        imageListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self ]result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                    self.photos = self.imageListService.photos
+                    UIBlockingProgressHUD.dismiss()
+                case .failure(let error):
+                    UIBlockingProgressHUD.dismiss()
+                    self.alertPresenter.createAlert(
+                        alertTitle: "Что-то пошло не так :(",
+                        alertMessage: "Не удалось обработать нажатие на кнопку лайк, \(error.localizedDescription)") {
+                        }
+                }
+            }
+        }
+    }
+}
+
+extension ImagesListViewController: AlertPresenterDelegate {
+    func showAlert(alert: UIAlertController) {
+        self.present(alert, animated: true)
     }
 }

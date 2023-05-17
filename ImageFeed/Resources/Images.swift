@@ -13,4 +13,7 @@ enum Images {
     static let profileTabBarIcon = UIImage(named: "tab_profile_active")
     static let authorizationLogo = UIImage(named: "startScreenVector")
     static let stubImage = UIImage(named: "stubImage")
+    
+    static let isLiked = UIImage(named: "likeIsActive")
+    static let isNotLiked = UIImage(named: "likeIsNotActive")
 }

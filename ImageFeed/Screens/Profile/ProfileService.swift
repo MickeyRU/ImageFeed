@@ -35,7 +35,6 @@ final class ProfileService {
         task.resume()
     }
     
-    // Конвертируем приходящую модель профайла с сервера в модель для отображения в UI
     func convertProfile (profile: ProfileResult) -> Profile {
         let profile = Profile(
             username: profile.userLogin,

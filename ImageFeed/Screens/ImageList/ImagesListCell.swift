@@ -8,11 +8,18 @@
 import UIKit
 import Kingfisher
 
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
+
 final class ImagesListCell: UITableViewCell {
     
     // MARK: - Public Properties
     
     static let reuseIdentifier = "ImagesListCell"
+    
+    weak var delegate: ImagesListCellDelegate?
+    
     
     var reloadRowClosure: (() -> Void)?
     
@@ -36,6 +43,12 @@ final class ImagesListCell: UITableViewCell {
         photoImageView.kf.cancelDownloadTask()
     }
     
+    public func setIsLiked(isLiked: Bool) {
+        let likeImage = isLiked ? Images.isNotLiked : Images.isLiked
+           likeButton.imageView?.image = likeImage
+           likeButton.setImage(likeImage, for: .normal)
+       }
+    
     func configureCell(photo: Photo) {
         if let imageUrl = URL(string: photo.thumbImageURL) {
             let processor = RoundCornerImageProcessor(cornerRadius: 16)
@@ -51,5 +64,11 @@ final class ImagesListCell: UITableViewCell {
             photoImageView.image = Images.stubImage
             dateLabel.text = photo.createdAt != nil ? dateFormatter.string(from: photo.createdAt!) : ""
         }
+    }
+    
+    // MARK: - IBAction
+
+    @IBAction private func likeButtonClicked(_ sender: Any) {
+        delegate?.imageListCellDidTapLike(self)
     }
 }

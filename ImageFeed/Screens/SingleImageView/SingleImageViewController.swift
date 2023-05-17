@@ -16,12 +16,7 @@ final class SingleImageViewController: UIViewController {
         .lightContent
     }
     
-    var photo: Photo! {
-        didSet {
-            guard isViewLoaded else { return }
-            setImage()
-        }
-    }
+    var photo: Photo!
     
     // MARK: - IBOutlet
     
@@ -29,18 +24,15 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet private weak var shareButton: UIButton!
     
-    // MARK: - Private Properties
-    
-    private let alertPresenter = AlertPresenter()
-    
     // MARK: - UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter.delegate = self
         
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
+        
+        setImage()
     }
     
     // MARK: - IBAction
@@ -65,22 +57,16 @@ final class SingleImageViewController: UIViewController {
     private func setImage() {
         UIBlockingProgressHUD.show()
         if let imageUrl = URL(string: photo.largeImageURL) {
-            imageView.kf.setImage(
-                with: imageUrl,
-                placeholder: Images.stubImage) { [weak self] result in
-                    UIBlockingProgressHUD.dismiss()
-                    guard let self = self else { return }
-                    switch result {
-                    case .success(let imageResult):
-                        self.rescaleAndCenterImageInScrollView(image: imageResult.image)
-                    case .failure(let error):
-                        self.alertPresenter.createAlert(
-                            title: "Что-то пошло не так :(",
-                            message: "Не удалось загрузить фото \(error.localizedDescription)") {
-                                self.imageView.image = Images.stubImage
-                            }
-                    }
+            imageView.kf.setImage(with: imageUrl) { [weak self] result in
+                UIBlockingProgressHUD.dismiss()
+                guard let self = self else { return }
+                switch result {
+                case .success(let imageResult):
+                    self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+                case .failure:
+                    self.showAlert()
                 }
+            }
         } else {
             imageView.image = Images.stubImage
         }
@@ -102,6 +88,20 @@ final class SingleImageViewController: UIViewController {
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
+    
+    private func showAlert() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так :(",
+            message: "Попробовать ещё раз?",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Не надо", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { action in
+            self.setImage()
+        }))
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - UIScrollViewDelegate
@@ -120,12 +120,4 @@ extension SingleImageViewController: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         self.centerImage()
     }
-}
-
-extension SingleImageViewController: AlertPresenterDelegate {
-    func showAlert(alert: UIAlertController) {
-        self.present(alert, animated: true)
-    }
-    
-    
 }

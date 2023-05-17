@@ -16,7 +16,7 @@ final class ImagesListService {
     private var currentTask: URLSessionTask?
     
     private let networkClient = NetworkClient.shared
-    
+
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
@@ -52,12 +52,38 @@ final class ImagesListService {
         task.resume()
     }
     
-    private func imageListRequest(page: Int) -> URLRequest? {
-        URLRequest.makeHTTPRequest(
-            path: "/photos"
-            + "?page=\(page)",
-            httpMethod: "GET",
-            uRLString: Constants.defaultApiBaseURLString)
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        currentTask?.cancel()
+        guard let request = isLike ? likeRequest(photoID: photoId) : unLikeRequest(photoID: photoId) else {
+            assertionFailure("Bad like request")
+            return
+        }
+        let task = networkClient.getObject(dataType: LikePhotoResult.self, for: request) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let currentPhotoResult):
+                if let currentPhotoIndex = self.photos.firstIndex(where: { $0.id == currentPhotoResult.photo?.id }) {
+                    let currentPhoto = self.photos[currentPhotoIndex]
+                    let newPhoto = Photo(
+                        id: currentPhoto.id,
+                        size: currentPhoto.size,
+                        createdAt: currentPhoto.createdAt,
+                        welcomeDescription: currentPhoto.welcomeDescription,
+                        thumbImageURL: currentPhoto.thumbImageURL,
+                        largeImageURL: currentPhoto.largeImageURL,
+                        isLiked: !currentPhoto.isLiked
+                    )
+                    self.photos = self.photos.withReplaced(itemAt: currentPhotoIndex, newValue: newPhoto)
+                }
+                completion(.success(()))
+            case .failure(let error):
+                print(error)
+                completion(.failure(error))
+            }
+        }
+        currentTask = task
+        task.resume()
     }
     
     private func addNewPhotos(from receivedPhotos: [PhotosResult]) {
@@ -81,5 +107,32 @@ final class ImagesListService {
             thumbImageURL: photo.urls.thumb,
             largeImageURL: photo.urls.full,
             isLiked: photo.isLiked)
+    }
+}
+
+// MARK: Request Methods
+
+extension ImagesListService {
+    
+    private func imageListRequest(page: Int) -> URLRequest? {
+        URLRequest.makeHTTPRequest(
+            path: "/photos"
+            + "?page=\(page)",
+            httpMethod: "GET",
+            uRLString: Constants.defaultApiBaseURLString)
+    }
+    
+    private func likeRequest(photoID: String) -> URLRequest? {
+        URLRequest.makeHTTPRequest(
+            path: "/photos/\(photoID)/like",
+            httpMethod: "POST",
+            uRLString: Constants.defaultApiBaseURLString)
+    }
+    
+    private func unLikeRequest(photoID: String) -> URLRequest? {
+        URLRequest.makeHTTPRequest(
+            path: "/photos/\(photoID)/like",
+            httpMethod: "DELETE",
+            uRLString: Constants.defaultApiBaseURLString)
     }
 }

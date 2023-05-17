@@ -17,7 +17,6 @@ final class SplashViewController: UIViewController {
     private let profileService: ProfileService
     private let profileImageService: ProfileImageService
     private let authService: OAuth2Service
-    private let alertPresenter = AlertPresenter()
     
     private let showLoginFlowSegueIdentifier = "ShowLoginFlow"
     
@@ -45,10 +44,6 @@ final class SplashViewController: UIViewController {
     // MARK: - UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter.delegate = self
-        view.backgroundColor = Colors.logoViewBGColor
-        
-        
         
         setupViews()
     }
@@ -61,6 +56,7 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Private Methods
     private func setupViews() {
+        view.backgroundColor = Colors.logoViewBGColor
         view.addViews(backgroundImage)
         
         NSLayoutConstraint.activate([
@@ -112,12 +108,8 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success(let token):
                 self.fetchProfile(token: token)
             case .failure(let error):
-                self.alertPresenter.createAlert(
-                    title: "Что-то пошло не так :(",
-                    message: "Не удалось войти в систему. \(error.localizedDescription)"
-                ) {
-                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
-                }
+                self.showAlert(with: error)
+                break
             }
         }
     }
@@ -133,20 +125,18 @@ extension SplashViewController: AuthViewControllerDelegate {
                 profileImageService.fetchProfileImageURL(userName: username) { _ in }
                 self.switchToTabBarController()
             case .failure(let error):
-                alertPresenter.createAlert(
-                    title: "Что-то пошло не так :(",
-                    message: "Не удалось получить информацию о профиле, \(error.localizedDescription)"
-                ) {
-                    self.performSegue(withIdentifier: self.showLoginFlowSegueIdentifier, sender: nil)
-                }
+                self.showAlert(with: error)
+                break
             }
         }
     }
-}
-
-// MARK: - AlertPresenterProtocol
-extension SplashViewController: AlertPresenterDelegate {
-    func showAlert(alert: UIAlertController) {
-        self.present(alert, animated: true)
+    
+    private func showAlert(with error: Error) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так :(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
     }
 }

@@ -155,7 +155,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="289"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="1xp-b1-j8s" userLabel="photoImageView">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1xp-b1-j8s" userLabel="photoImageView">
                                                     <rect key="frame" x="16" y="4" width="361" height="281"/>
                                                     <color key="backgroundColor" red="0.10204324870000001" green="0.1053578332" blue="0.1333401203" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <userDefinedRuntimeAttributes>
@@ -174,6 +174,9 @@
                                                     <state key="normal" image="likeIsNotActive">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked:" destination="HEK-vX-FeB" eventType="touchUpInside" id="n1D-G0-gOa"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="26 августа 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6TK-rs-NkU" userLabel="dateLabel">
                                                     <rect key="frame" x="27.999999999999993" y="254.33333333333334" width="102.33333333333331" height="15.666666666666657"/>

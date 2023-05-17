@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -16,6 +17,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Private Properties
     
     private let profileImageService = ProfileImageService.shared
+    private let alertPresenter = AlertPresenter()
     
     private let profileImage : UIImageView = {
         let imageView = UIImageView()
@@ -58,8 +60,17 @@ final class ProfileViewController: UIViewController {
     private var profileImageServiceObserver: NSObjectProtocol?
     
     @objc private func didTappedExitButton() {
-        // ToDo: code
-        print("didTappedExitButton")
+        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.logOutFromProfile()
+        }
+        
+        let noAction = UIAlertAction(title: "Нет", style: .default)
+        
+        alertPresenter.prepeareAlertForExit(
+            alertTitle: "Пока, пока!",
+            alertMessage:"Уверены, что хотите выйти?",
+            alertActions: [yesAction, noAction])
     }
     
     // MARK: - UIViewController
@@ -67,6 +78,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        alertPresenter.delegate = self
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,
@@ -133,5 +145,38 @@ extension ProfileViewController {
             self.descriptionLabel.text = profile.bio
             self.loginNameLabel.text = profile.loginName
         }
+    }
+}
+
+extension ProfileViewController {
+    private func cleanCookie() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record]) { }
+            }
+        }
+    }
+    
+    private func cleanStorage() {
+        OAuth2TokenStorage.shared.removeToken()
+    }
+    
+    private func logOutFromProfile() {
+        cleanCookie()
+        cleanStorage()
+        
+        guard let window = UIApplication.shared.windows.first else {
+            assertionFailure("Invalid configuration")
+            return
+        }
+        let splashVC = SplashViewController()
+        window.rootViewController = splashVC
+    }
+}
+
+extension ProfileViewController: AlertPresenterDelegate {
+    func showAlert(alert: UIAlertController) {
+        present(alert, animated: true)
     }
 }
