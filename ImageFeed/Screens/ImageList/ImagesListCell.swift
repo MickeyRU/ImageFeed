@@ -62,8 +62,8 @@ final class ImagesListCell: UITableViewCell {
                 }
         } else {
             photoImageView.image = Images.stubImage
-            dateLabel.text = photo.createdAt != nil ? dateFormatter.string(from: photo.createdAt!) : ""
         }
+        dateLabel.text = photo.createdAt != nil ? dateFormatter.string(from: photo.createdAt!) : ""
     }
     
     // MARK: - IBAction

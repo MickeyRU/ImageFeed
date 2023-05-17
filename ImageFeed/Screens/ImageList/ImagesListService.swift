@@ -17,9 +17,8 @@ final class ImagesListService {
     
     private let networkClient = NetworkClient.shared
 
-    private let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+    private let dateFormatter: ISO8601DateFormatter = {
+        let dateFormatter = ISO8601DateFormatter()
         return dateFormatter
     }()
     
