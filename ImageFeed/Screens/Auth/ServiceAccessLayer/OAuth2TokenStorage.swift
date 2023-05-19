@@ -23,7 +23,7 @@ final class OAuth2TokenStorage {
         }
     }
     
-    func removeToken() -> Bool {
+    @discardableResult func removeToken() -> Bool {
         keychainWrapper.removeObject(forKey: Constants.bearerToken)
     }
     

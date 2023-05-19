@@ -89,12 +89,11 @@ final class ImagesListService {
         receivedPhotos.forEach { photoResult in
             let convertedPhoto = convertToUIPhotoModel(from: photoResult)
             photos.append(convertedPhoto)
-            
-            NotificationCenter.default.post(
-                name: ImagesListService.didChangeNotification,
-                object: self,
-                userInfo: ["Photos" : self.photos])
         }
+        NotificationCenter.default.post(
+            name: ImagesListService.didChangeNotification,
+            object: self,
+            userInfo: ["Photos" : self.photos])
     }
     
     private func convertToUIPhotoModel(from photo: PhotosResult) -> Photo {

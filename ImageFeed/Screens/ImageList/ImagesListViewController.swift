@@ -84,6 +84,20 @@ final class ImagesListViewController: UIViewController {
     private func reloadRowForTable(indexPath: IndexPath) {
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
+    
+    private func replacePhotoWithNewLikeValue(photo: Photo) {
+        if let index = self.photos.firstIndex(where: { $0.id == photo.id }) {
+            let newPhoto = Photo(
+                id: photo.id,
+                size: photo.size,
+                createdAt: photo.createdAt,
+                welcomeDescription: photo.welcomeDescription,
+                thumbImageURL: photo.thumbImageURL,
+                largeImageURL: photo.largeImageURL,
+                isLiked: !photo.isLiked)
+            photos[index] = newPhoto
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -144,12 +158,14 @@ extension ImagesListViewController: ImagesListCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = photos[indexPath.row]
         UIBlockingProgressHUD.show()
-        imageListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self ]result in
+        imageListService.changeLike(photoId: photo.id, isLike: photo.isLiked) { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success:
+                    self.replacePhotoWithNewLikeValue(photo: photo)
                     cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                    self.reloadRowForTable(indexPath: indexPath)
                     self.photos = self.imageListService.photos
                     UIBlockingProgressHUD.dismiss()
                 case .failure(let error):
