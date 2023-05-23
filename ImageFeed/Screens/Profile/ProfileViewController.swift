@@ -21,7 +21,6 @@ final class ProfileViewController: UIViewController {
     
     private let profileImage : UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 61
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -78,6 +77,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        view.backgroundColor = Colors.logoViewBGColor
         alertPresenter.delegate = self
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(
@@ -120,10 +120,10 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.leadingAnchor.constraint(equalTo: loginNameLabel.leadingAnchor),
             descriptionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
             
-            exitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -26),
-            exitButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-            exitButton.widthAnchor.constraint(equalToConstant: 20),
-            exitButton.heightAnchor.constraint(equalToConstant: 22)
+            exitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            exitButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 89),
+            exitButton.widthAnchor.constraint(equalToConstant: 44),
+            exitButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
     

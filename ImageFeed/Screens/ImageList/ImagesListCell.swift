@@ -20,9 +20,6 @@ final class ImagesListCell: UITableViewCell {
     
     weak var delegate: ImagesListCellDelegate?
     
-    
-    var reloadRowClosure: (() -> Void)?
-    
     // MARK: - IBOutlet
 
     @IBOutlet var photoImageView: UIImageView!
@@ -31,39 +28,16 @@ final class ImagesListCell: UITableViewCell {
     
     // MARK: - Private Properties
     
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         photoImageView.kf.cancelDownloadTask()
     }
     
-    public func setIsLiked(isLiked: Bool) {
-        let likeImage = isLiked ? Images.isNotLiked : Images.isLiked
+    func setIsLiked(isLiked: Bool) {
+        let likeImage = isLiked ? Images.isLiked : Images.isNotLiked
            likeButton.setImage(likeImage, for: .normal)
        }
     
-    func configureCell(photo: Photo) {
-        if let imageUrl = URL(string: photo.thumbImageURL) {
-            let processor = RoundCornerImageProcessor(cornerRadius: 16)
-            photoImageView.kf.indicatorType = .activity
-            photoImageView.kf.setImage(
-                with: imageUrl,
-                placeholder: Images.stubImage,
-                options: [.processor(processor)]) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.reloadRowClosure?()
-                }
-        } else {
-            photoImageView.image = Images.stubImage
-        }
-        dateLabel.text = photo.createdAt != nil ? dateFormatter.string(from: photo.createdAt!) : ""
-    }
     
     // MARK: - IBAction
 

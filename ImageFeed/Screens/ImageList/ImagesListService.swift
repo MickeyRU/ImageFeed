@@ -42,7 +42,7 @@ final class ImagesListService {
                 self.addNewPhotos(from: photoResult)
             case .failure(let error):
                 print(error.localizedDescription)
-                // ToDo: Error - вывести уведомление для пользователя?
+                // ToDo: Error - вывести уведомление для пользователя?!
             }
             self.currentTask = nil
             self.lastLoadedPage = nextPage
@@ -61,8 +61,8 @@ final class ImagesListService {
         let task = networkClient.getObject(dataType: LikePhotoResult.self, for: request) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let currentPhotoResult):
-                if let currentPhotoIndex = self.photos.firstIndex(where: { $0.id == currentPhotoResult.photo?.id }) {
+            case .success(let PhotoResult):
+                if let currentPhotoIndex = self.photos.firstIndex(where: { $0.id == PhotoResult.photo?.id }) {
                     let currentPhoto = self.photos[currentPhotoIndex]
                     let newPhoto = Photo(
                         id: currentPhoto.id,
@@ -77,7 +77,6 @@ final class ImagesListService {
                 }
                 completion(.success(()))
             case .failure(let error):
-                print(error)
                 completion(.failure(error))
             }
         }
