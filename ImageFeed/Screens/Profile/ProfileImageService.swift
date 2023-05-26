@@ -45,6 +45,6 @@ final class ProfileImageService {
     }
     
     private func makeUserPhotoProfileRequest(userName: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(path: "/users/\(userName)", httpMethod: "GET", uRLString: Constants.defaultApiBaseURLString)
+        URLRequest.makeHTTPRequest(path: "/users/\(userName)", httpMethod: "GET", uRLString: APIConstants.defaultApiBaseURLString)
     }
 }

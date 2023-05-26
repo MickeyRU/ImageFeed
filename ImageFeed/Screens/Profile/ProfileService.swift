@@ -45,6 +45,6 @@ final class ProfileService {
     }
     
     private func selfProfileRequest() -> URLRequest? {
-        URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", uRLString: Constants.defaultApiBaseURLString)
+        URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", uRLString: APIConstants.defaultApiBaseURLString)
     }
 }

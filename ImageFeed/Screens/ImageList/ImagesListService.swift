@@ -116,20 +116,20 @@ extension ImagesListService {
             path: "/photos"
             + "?page=\(page)",
             httpMethod: "GET",
-            uRLString: Constants.defaultApiBaseURLString)
+            uRLString: APIConstants.defaultApiBaseURLString)
     }
     
     private func likeRequest(photoID: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoID)/like",
             httpMethod: "POST",
-            uRLString: Constants.defaultApiBaseURLString)
+            uRLString: APIConstants.defaultApiBaseURLString)
     }
     
     private func unLikeRequest(photoID: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoID)/like",
             httpMethod: "DELETE",
-            uRLString: Constants.defaultApiBaseURLString)
+            uRLString: APIConstants.defaultApiBaseURLString)
     }
 }

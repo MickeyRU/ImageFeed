@@ -17,7 +17,7 @@ extension URLRequest {
         var request = URLRequest(url: baseUrl)
         request.httpMethod = httpMethod
         
-        if uRLString == Constants.defaultApiBaseURLString {
+        if uRLString == APIConstants.defaultApiBaseURLString {
             guard let authToken = OAuth2TokenStorage.shared.token else { return nil }
             request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         }
