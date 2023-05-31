@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		BE11768A29D594ED005BCA22 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE11768929D594ED005BCA22 /* ProfileViewController.swift */; };
+		BE17CB742A25FB0C006E50C3 /* ProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE17CB732A25FB0C006E50C3 /* ProfileTests.swift */; };
+		BE17CB772A25FB58006E50C3 /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE17CB762A25FB58006E50C3 /* ProfilePresenter.swift */; };
 		BE332AB329F03CA3005C8D5E /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE332AB229F03CA3005C8D5E /* SplashViewController.swift */; };
 		BE3826672A02E03100F27437 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3826662A02E03100F27437 /* ProfileImageService.swift */; };
 		BE3826692A02E0C800F27437 /* ProfileStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3826682A02E0C800F27437 /* ProfileStructures.swift */; };
@@ -25,7 +27,6 @@
 		BE8862722A2105ED006FA06F /* WebViewPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8862712A2105ED006FA06F /* WebViewPresenterSpy.swift */; };
 		BE8862742A21068E006FA06F /* WebViewViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8862732A21068E006FA06F /* WebViewViewControllerSpy.swift */; };
 		BEA19C3A2A0D903A00829F9A /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA19C392A0D903A00829F9A /* NetworkClient.swift */; };
-		BEA19C3E2A0E77F400829F9A /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA19C3D2A0E77F400829F9A /* AlertPresenter.swift */; };
 		BEA19C412A0E87C000829F9A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = BEA19C402A0E87C000829F9A /* Kingfisher */; };
 		BEA19C442A0EA04300829F9A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = BEA19C432A0EA04300829F9A /* SwiftKeychainWrapper */; };
 		BEA19C462A0EB38C00829F9A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA19C452A0EB38C00829F9A /* TabBarController.swift */; };
@@ -61,6 +62,8 @@
 
 /* Begin PBXFileReference section */
 		BE11768929D594ED005BCA22 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		BE17CB732A25FB0C006E50C3 /* ProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTests.swift; sourceTree = "<group>"; };
+		BE17CB762A25FB58006E50C3 /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		BE332AB229F03CA3005C8D5E /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		BE3826662A02E03100F27437 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		BE3826682A02E0C800F27437 /* ProfileStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStructures.swift; sourceTree = "<group>"; };
@@ -79,7 +82,6 @@
 		BE8862712A2105ED006FA06F /* WebViewPresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenterSpy.swift; sourceTree = "<group>"; };
 		BE8862732A21068E006FA06F /* WebViewViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerSpy.swift; sourceTree = "<group>"; };
 		BEA19C392A0D903A00829F9A /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
-		BEA19C3D2A0E77F400829F9A /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		BEA19C452A0EB38C00829F9A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		BEA19C492A10EA0600829F9A /* ImagesStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesStructures.swift; sourceTree = "<group>"; };
 		BEA553DD29DB0600001A1BA5 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE17CB752A25FB14006E50C3 /* ProfileTests */ = {
+			isa = PBXGroup;
+			children = (
+				BE17CB732A25FB0C006E50C3 /* ProfileTests.swift */,
+			);
+			path = ProfileTests;
+			sourceTree = "<group>";
+		};
 		BE332AB029F03C68005C8D5E /* Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				BE8862702A2105A9006FA06F /* WebViewTests */,
+				BE17CB752A25FB14006E50C3 /* ProfileTests */,
 			);
 			path = ImageFeedTests;
 			sourceTree = "<group>";
@@ -189,14 +200,6 @@
 				BEA19C392A0D903A00829F9A /* NetworkClient.swift */,
 			);
 			path = Network;
-			sourceTree = "<group>";
-		};
-		BEA19C3C2A0E77C600829F9A /* Alerts */ = {
-			isa = PBXGroup;
-			children = (
-				BEA19C3D2A0E77F400829F9A /* AlertPresenter.swift */,
-			);
-			path = Alerts;
 			sourceTree = "<group>";
 		};
 		BEA553DA29DB0557001A1BA5 /* Application */ = {
@@ -269,6 +272,7 @@
 				BE3826662A02E03100F27437 /* ProfileImageService.swift */,
 				BE3826682A02E0C800F27437 /* ProfileStructures.swift */,
 				BE11768929D594ED005BCA22 /* ProfileViewController.swift */,
+				BE17CB762A25FB58006E50C3 /* ProfilePresenter.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -303,7 +307,6 @@
 			isa = PBXGroup;
 			children = (
 				BEA553DA29DB0557001A1BA5 /* Application */,
-				BEA19C3C2A0E77C600829F9A /* Alerts */,
 				BEA19C3B2A0D903F00829F9A /* Network */,
 				BE332AB029F03C68005C8D5E /* Screens */,
 				BEA553DB29DB05C0001A1BA5 /* Storyboards */,
@@ -426,6 +429,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE88626A2A20FD68006FA06F /* WebViewTests.swift in Sources */,
+				BE17CB742A25FB0C006E50C3 /* ProfileTests.swift in Sources */,
 				BE8862742A21068E006FA06F /* WebViewViewControllerSpy.swift in Sources */,
 				BE8862722A2105ED006FA06F /* WebViewPresenterSpy.swift in Sources */,
 			);
@@ -454,13 +458,13 @@
 				BE73A9EB29D707140077B5D7 /* SingleImageViewController.swift in Sources */,
 				BEA19C4A2A10EA0600829F9A /* ImagesStructures.swift in Sources */,
 				BE78478329EF3353008FC484 /* OAuth2TokenStorage.swift in Sources */,
-				BEA19C3E2A0E77F400829F9A /* AlertPresenter.swift in Sources */,
 				BE3826672A02E03100F27437 /* ProfileImageService.swift in Sources */,
 				BEB1C3942A0191EE007FA345 /* ProfileService.swift in Sources */,
 				BEDAED2629C367D0005BBF34 /* SceneDelegate.swift in Sources */,
 				BEA553E429DB1865001A1BA5 /* Color.swift in Sources */,
 				BEE2C1822A0D8090001BB3E9 /* URLSession+Extension.swift in Sources */,
 				BE3826692A02E0C800F27437 /* ProfileStructures.swift in Sources */,
+				BE17CB772A25FB58006E50C3 /* ProfilePresenter.swift in Sources */,
 				BEA553E629DB18CA001A1BA5 /* UIColor+Extension.swift in Sources */,
 				BEF3467B2A125AD500A84919 /* ImagesListService.swift in Sources */,
 				BEB1C3922A0142F0007FA345 /* UIBlockingProgressHUD.swift in Sources */,
@@ -507,7 +511,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3YZWNV863X;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pavel.afanasiev.ImageFeedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -526,7 +530,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3YZWNV863X;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = pavel.afanasiev.ImageFeedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

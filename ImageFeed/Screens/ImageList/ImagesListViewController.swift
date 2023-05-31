@@ -24,7 +24,6 @@ final class ImagesListViewController: UIViewController {
     private let imageListService = ImagesListService.shared
     private var photos: [Photo] = []
     private var imageListServiceObserver: NSObjectProtocol?
-    private let alertPresenter = AlertPresenter()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -53,8 +52,6 @@ final class ImagesListViewController: UIViewController {
                 guard let self = self else { return }
                 self.updateTableViewAnimated()
             })
-        
-        alertPresenter.delegate = self
     }
     
     // MARK: - Public methods
@@ -175,18 +172,18 @@ extension ImagesListViewController: UITableViewDataSource {
                     UIBlockingProgressHUD.dismiss()
                 case .failure(let error):
                     UIBlockingProgressHUD.dismiss()
-                    self.alertPresenter.createAlert(
-                        alertTitle: "Что-то пошло не так :(",
-                        alertMessage: "Не удалось обработать нажатие на кнопку лайк, \(error.localizedDescription)") {}
+                    self.showLikeErrorAlert(with: error)
                 }
             }
         }
-    }
-    
-// MARK: - AlertPresenterDelegate
-
-    extension ImagesListViewController: AlertPresenterDelegate {
-        func showAlert(alert: UIAlertController) {
-            self.present(alert, animated: true)
+        
+        private func showLikeErrorAlert(with: Error) {
+            let alert = UIAlertController(
+                title: "Что-то пошло не так(",
+                message: "Не удалось поставить лайк",
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            alert.dismiss(animated: true)
+            present(alert, animated: true)
         }
     }
