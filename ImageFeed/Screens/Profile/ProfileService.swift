@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ProfileService {
+public final class ProfileService {
     static let shared = ProfileService()
     
     private var currentTask: URLSessionTask?

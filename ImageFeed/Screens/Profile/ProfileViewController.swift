@@ -9,12 +9,13 @@ import UIKit
 import Kingfisher
 import WebKit
 
-protocol ProfileViewControllerProtocol: AnyObject {
+public protocol ProfileViewControllerProtocol: AnyObject {
     var presenter: ProfilePresenterProtocol { get set }
     func updateAvatar()
+    func showLogOutAlert()
 }
 
-final class ProfileViewController: UIViewController , ProfileViewControllerProtocol{
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
@@ -24,10 +25,8 @@ final class ProfileViewController: UIViewController , ProfileViewControllerProto
     }()
     
     // MARK: - Private Properties
-    
-    private let profileImageService = ProfileImageService.shared
-    
-    private let profileImage : UIImageView = {
+        
+    private var profileImage : UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -73,7 +72,6 @@ final class ProfileViewController: UIViewController , ProfileViewControllerProto
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.view = self
-
         presenter.viewDidLoad()
         setupViews()
         updateAvatar()
@@ -81,7 +79,7 @@ final class ProfileViewController: UIViewController , ProfileViewControllerProto
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let profile = ProfileService.shared.profile else { return }
+        guard let profile = presenter.profileService.profile else { return }
         updateProfileUIData(profile: profile)
     }
     
@@ -117,19 +115,16 @@ final class ProfileViewController: UIViewController , ProfileViewControllerProto
         ])
     }
     
-    private func showLogOutAlert() {
+    func showLogOutAlert() {
         let alert = presenter.createAlert()
         present(alert, animated: true, completion: nil)
     }
     
     func updateAvatar() {
-        guard
-            let profileImageURl = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURl)
-        else { return }
-        profileImage.kf.indicatorType = .activity
+        guard let url = presenter.getUrlForProfileImage() else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        profileImage.kf.setImage(with: url, options: [.processor(processor)])
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url, placeholder: Images.profilePhotoStub, options: [.processor(processor)])
         
         let cache = ImageCache.default
         cache.clearDiskCache()

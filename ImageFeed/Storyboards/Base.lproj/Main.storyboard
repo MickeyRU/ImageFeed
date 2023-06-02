@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="byi-DK-bSK">
-                                <rect key="frame" x="0.0" y="44" width="393" height="808"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -25,7 +25,7 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oPb-7l-mlN">
-                                <rect key="frame" x="0.0" y="0.0" width="64" height="44"/>
+                                <rect key="frame" x="0.0" y="59" width="64" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="64" id="2Og-rT-KPb"/>
                                     <constraint firstAttribute="height" constant="44" id="pUM-GG-Wpb"/>
@@ -37,7 +37,7 @@
                                 </connections>
                             </button>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qJO-8h-d00">
-                                <rect key="frame" x="16" y="44" width="361" height="4"/>
+                                <rect key="frame" x="16" y="103" width="361" height="4"/>
                                 <color key="progressTintColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                             </progressView>
                         </subviews>
@@ -219,7 +219,7 @@
                             <constraint firstAttribute="trailing" secondItem="UXg-YE-Zbb" secondAttribute="trailing" id="nRE-rC-UzM"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="fUU-nd-hQq"/>
+                    <tabBarItem key="tabBarItem" title="" id="fUU-nd-hQq"/>
                     <navigationItem key="navigationItem" id="rrp-vo-5fZ"/>
                     <connections>
                         <outlet property="tableView" destination="UXg-YE-Zbb" id="LnV-Io-QhK"/>
@@ -270,7 +270,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QxA-Hr-xCh">
-                                <rect key="frame" x="171.66666666666666" y="751" width="50" height="50"/>
+                                <rect key="frame" x="171.66666666666666" y="717" width="50" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="GJ2-pe-4lS"/>
                                     <constraint firstAttribute="width" constant="50" id="oOc-76-kim"/>
@@ -314,6 +314,5 @@
         <image name="likeIsNotActive" width="29.333333969116211" height="26"/>
         <image name="nav_back_button" width="24" height="24"/>
         <image name="nav_back_button_white" width="24" height="24"/>
-        <image name="tab_editorial_active" width="30" height="30"/>
     </resources>
 </document>

@@ -7,11 +7,17 @@
 
 import UIKit
 
-final class ImagesListViewController: UIViewController {
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListPresenterProtocol? { get set }
+}
+
+final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
+    
+    var presenter: ImagesListPresenterProtocol?
     
     // MARK: - IBOutlet
     
@@ -157,33 +163,33 @@ extension ImagesListViewController: UITableViewDataSource {
     }
 }
 // MARK: - ImagesListCellDelegate
-    
-    extension ImagesListViewController: ImagesListCellDelegate {
-        func imageListCellDidTapLike(_ cell: ImagesListCell) {
-            guard let indexPath = tableView.indexPath(for: cell) else { return }
-            let photo = photos[indexPath.row]
-            UIBlockingProgressHUD.show()
-            imageListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success:
-                    self.photos = self.imageListService.photos
-                    cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
-                    UIBlockingProgressHUD.dismiss()
-                case .failure(let error):
-                    UIBlockingProgressHUD.dismiss()
-                    self.showLikeErrorAlert(with: error)
-                }
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        imageListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                self.photos = self.imageListService.photos
+                cell.setIsLiked(isLiked: self.photos[indexPath.row].isLiked)
+                UIBlockingProgressHUD.dismiss()
+            case .failure(let error):
+                UIBlockingProgressHUD.dismiss()
+                self.showLikeErrorAlert(with: error)
             }
         }
-        
-        private func showLikeErrorAlert(with: Error) {
-            let alert = UIAlertController(
-                title: "Что-то пошло не так(",
-                message: "Не удалось поставить лайк",
-                preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
-            alert.dismiss(animated: true)
-            present(alert, animated: true)
-        }
     }
+    
+    private func showLikeErrorAlert(with: Error) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось поставить лайк",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        alert.dismiss(animated: true)
+        present(alert, animated: true)
+    }
+}

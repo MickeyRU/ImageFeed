@@ -13,6 +13,7 @@ final class ProfileImageService {
     
     private var currentTask: URLSessionTask?
     private let networkClient = NetworkClient.shared
+    private let profileService = ProfileService.shared
     
     private (set) var avatarURL: String?
     

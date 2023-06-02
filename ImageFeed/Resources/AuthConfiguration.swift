@@ -5,7 +5,7 @@
 //  Created by Павел Афанасьев on 13.04.2023.
 //
 
-import UIKit
+import Foundation
 
 struct APIConstants {
     static let accessKey = "F7KZOMl0r5BGerBUC2H6WpsAbCTiIhPz-X_o55PCeGA"
