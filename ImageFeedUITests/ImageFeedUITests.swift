@@ -67,7 +67,8 @@ final class ImageFeedUITests: XCTestCase {
         image.pinch(withScale: 0.5, velocity: -1)
         
         let navBackButtonWhiteButton = app.buttons["backButton"]
-        navBackButtonWhiteButton.tap()    }
+        navBackButtonWhiteButton.tap()
+    }
     
     func testProfile() throws {
         sleep(3)
