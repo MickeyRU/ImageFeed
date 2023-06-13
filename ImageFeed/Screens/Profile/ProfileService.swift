@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ProfileService {
+public final class ProfileService {
     static let shared = ProfileService()
     
     private var currentTask: URLSessionTask?
@@ -45,6 +45,6 @@ final class ProfileService {
     }
     
     private func selfProfileRequest() -> URLRequest? {
-        URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", uRLString: Constants.defaultApiBaseURLString)
+        URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET", uRLString: APIConstants.defaultApiBaseURLString)
     }
 }

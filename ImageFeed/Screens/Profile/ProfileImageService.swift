@@ -13,6 +13,7 @@ final class ProfileImageService {
     
     private var currentTask: URLSessionTask?
     private let networkClient = NetworkClient.shared
+    private let profileService = ProfileService.shared
     
     private (set) var avatarURL: String?
     
@@ -45,6 +46,6 @@ final class ProfileImageService {
     }
     
     private func makeUserPhotoProfileRequest(userName: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(path: "/users/\(userName)", httpMethod: "GET", uRLString: Constants.defaultApiBaseURLString)
+        URLRequest.makeHTTPRequest(path: "/users/\(userName)", httpMethod: "GET", uRLString: APIConstants.defaultApiBaseURLString)
     }
 }

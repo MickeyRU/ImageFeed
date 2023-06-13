@@ -7,7 +7,14 @@
 
 import UIKit
 
-final class ImagesListService {
+protocol ImageListServiceProtocol: AnyObject {
+    var photos: [Photo] { get }
+    
+    func fetchPhotosNextPage()
+    func changeLike(photoID: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+}
+
+final class ImagesListService: ImageListServiceProtocol {
     static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
     
@@ -51,10 +58,10 @@ final class ImagesListService {
         task.resume()
     }
     
-    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+    func changeLike(photoID: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         assert(Thread.isMainThread)
         currentTask?.cancel()
-        guard let request = isLike ? likeRequest(photoID: photoId) : unLikeRequest(photoID: photoId) else {
+        guard let request = isLike ? likeRequest(photoID: photoID) : unLikeRequest(photoID: photoID) else {
             assertionFailure("Bad like request")
             return
         }
@@ -116,20 +123,20 @@ extension ImagesListService {
             path: "/photos"
             + "?page=\(page)",
             httpMethod: "GET",
-            uRLString: Constants.defaultApiBaseURLString)
+            uRLString: APIConstants.defaultApiBaseURLString)
     }
     
     private func likeRequest(photoID: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoID)/like",
             httpMethod: "POST",
-            uRLString: Constants.defaultApiBaseURLString)
+            uRLString: APIConstants.defaultApiBaseURLString)
     }
     
     private func unLikeRequest(photoID: String) -> URLRequest? {
         URLRequest.makeHTTPRequest(
             path: "/photos/\(photoID)/like",
             httpMethod: "DELETE",
-            uRLString: Constants.defaultApiBaseURLString)
+            uRLString: APIConstants.defaultApiBaseURLString)
     }
 }

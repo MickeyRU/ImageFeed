@@ -9,17 +9,24 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol { get set }
+    func updateAvatar()
+    func showLogOutAlert()
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
-        
+    
+    lazy var presenter: ProfilePresenterProtocol = {
+        return ProfilePresenter()
+    }()
+    
     // MARK: - Private Properties
-    
-    private let profileImageService = ProfileImageService.shared
-    private let alertPresenter = AlertPresenter()
-    
-    private let profileImage : UIImageView = {
+        
+    private var profileImage : UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -53,53 +60,35 @@ final class ProfileViewController: UIViewController {
         let button = UIButton()
         button.setImage(Images.exitButtonImage, for: .normal)
         button.addTarget(self, action: #selector(didTappedExitButton), for: .touchUpInside)
+        button.accessibilityIdentifier = "logoutButton"
         return button
     }()
     
-    private var profileImageServiceObserver: NSObjectProtocol?
-    
     @objc private func didTappedExitButton() {
-        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            self.logOutFromProfile()
-        }
-        
-        let noAction = UIAlertAction(title: "Нет", style: .default)
-        
-        alertPresenter.prepeareAlertForExit(
-            alertTitle: "Пока, пока!",
-            alertMessage:"Уверены, что хотите выйти?",
-            alertActions: [yesAction, noAction])
+        showLogOutAlert()
     }
     
     // MARK: - UIViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter.view = self
+        presenter.viewDidLoad()
         setupViews()
-        view.backgroundColor = Colors.logoViewBGColor
-        alertPresenter.delegate = self
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ){ [weak self] _ in
-            guard let self = self else { return }
-            self.updateAvatar()
-        }
         updateAvatar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let profile = ProfileService.shared.profile else { return }
+        guard let profile = presenter.profileService.profile else { return }
         updateProfileUIData(profile: profile)
     }
-        
+    
     // MARK: - Private Methods
     
     private func setupViews() {
+        view.backgroundColor = Colors.logoViewBGColor
+        
         [profileImage, nameLabel, loginNameLabel, descriptionLabel, exitButton].forEach { view.addViews($0) }
         
         NSLayoutConstraint.activate([
@@ -127,14 +116,20 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURl = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURl)
-        else { return }
-        profileImage.kf.indicatorType = .activity
+    func showLogOutAlert() {
+        let alert = presenter.createAlert()
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func updateAvatar() {
+        guard let url = presenter.getUrlForProfileImage() else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        profileImage.kf.setImage(with: url, options: [.processor(processor)])
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url, placeholder: Images.profilePhotoStub, options: [.processor(processor)])
+        
+        let cache = ImageCache.default
+        cache.clearDiskCache()
+        cache.clearMemoryCache()
     }
 }
 
@@ -145,38 +140,5 @@ extension ProfileViewController {
             self.descriptionLabel.text = profile.bio
             self.loginNameLabel.text = profile.loginName
         }
-    }
-}
-
-extension ProfileViewController {
-    private func cleanCookie() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record]) { }
-            }
-        }
-    }
-    
-    private func cleanStorage() {
-        OAuth2TokenStorage.shared.removeToken()
-    }
-    
-    private func logOutFromProfile() {
-        cleanCookie()
-        cleanStorage()
-        
-        guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid configuration")
-            return
-        }
-        let splashVC = SplashViewController()
-        window.rootViewController = splashVC
-    }
-}
-
-extension ProfileViewController: AlertPresenterDelegate {
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
     }
 }
